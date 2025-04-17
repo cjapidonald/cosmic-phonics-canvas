@@ -44,18 +44,23 @@ const PhonicsBoard: React.FC = () => {
   // Initialize Fabric.js canvas
   useEffect(() => {
     if (canvasRef.current && !canvas) {
+      console.log("Initializing canvas");
+      
       // Create canvas with dimensions matching the parent container
       const fabricCanvas = new fabric.Canvas(canvasRef.current, {
         isDrawingMode: true,
         width: window.innerWidth,
         height: window.innerHeight - 100, // Account for toolbar height
-        backgroundColor: "#FFFFFF" // Changed to white background
+        backgroundColor: "#FFFFFF" // White background
       });
 
       // Initialize brush
       if (fabricCanvas.freeDrawingBrush) {
         fabricCanvas.freeDrawingBrush.color = canvasState.penColor;
         fabricCanvas.freeDrawingBrush.width = getPenSizeValue(canvasState.penSize);
+        // Ensure smooth drawing
+        fabricCanvas.freeDrawingBrush.strokeLineCap = 'round';
+        fabricCanvas.freeDrawingBrush.strokeLineJoin = 'round';
       }
       
       // Add phonics lines
@@ -79,6 +84,7 @@ const PhonicsBoard: React.FC = () => {
       // Register path creation event for storing stroke history
       fabricCanvas.on('path:created', (e: any) => {
         const path = e.path;
+        console.log("Path created:", path);
         if (strokeStartTime) {
           const duration = Date.now() - strokeStartTime;
           setCanvasState(prev => ({
@@ -94,6 +100,7 @@ const PhonicsBoard: React.FC = () => {
       
       // Handle mouse down for stroke timing
       fabricCanvas.on('mouse:down', () => {
+        console.log("Mouse down, isDrawingMode:", fabricCanvas.isDrawingMode);
         if (fabricCanvas.isDrawingMode) {
           setStrokeStartTime(Date.now());
           setIsDrawing(true);
@@ -102,6 +109,7 @@ const PhonicsBoard: React.FC = () => {
       
       // Handle mouse up for stroke timing
       fabricCanvas.on('mouse:up', () => {
+        console.log("Mouse up");
         setIsDrawing(false);
       });
       
@@ -116,8 +124,11 @@ const PhonicsBoard: React.FC = () => {
   // Update brush when pen size or color changes
   useEffect(() => {
     if (canvas?.freeDrawingBrush) {
+      console.log("Updating brush:", canvasState.penColor, canvasState.penSize);
       canvas.freeDrawingBrush.color = canvasState.penColor;
       canvas.freeDrawingBrush.width = getPenSizeValue(canvasState.penSize);
+      // Ensure canvas is in drawing mode
+      canvas.isDrawingMode = true;
     }
   }, [canvas, canvasState.penColor, canvasState.penSize]);
 
