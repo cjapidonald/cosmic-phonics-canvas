@@ -49,7 +49,7 @@ const PhonicsBoard: React.FC = () => {
         isDrawingMode: true,
         width: window.innerWidth,
         height: window.innerHeight - 100, // Account for toolbar height
-        backgroundColor: "#121726" // Dark futuristic background
+        backgroundColor: "#FFFFFF" // Changed to white background
       });
 
       // Initialize brush
@@ -352,7 +352,7 @@ const PhonicsBoard: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-blue-900 to-black">
+    <div className="relative w-full h-screen overflow-hidden bg-white">
       {/* Main canvas */}
       <div className="absolute inset-0 pt-[100px]">
         <canvas ref={canvasRef} className="w-full h-full" />
@@ -375,7 +375,7 @@ const PhonicsBoard: React.FC = () => {
       <div className="absolute bottom-4 left-4 z-10">
         <div className="flex items-center space-x-2">
           <div className={`h-3 w-3 rounded-full ${isDrawing ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
-          <span className="text-sm text-white opacity-70">{isDrawing ? 'Drawing' : 'Ready'}</span>
+          <span className="text-sm text-gray-700 opacity-70">{isDrawing ? 'Drawing' : 'Ready'}</span>
         </div>
       </div>
     </div>
